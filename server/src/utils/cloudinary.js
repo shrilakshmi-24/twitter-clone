@@ -7,10 +7,10 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-exports.uploadImage = (buffer) => {
+exports.uploadImage = (buffer, folder = 'tuweeter_tweets') => {
     return new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
-            { folder: 'tuweeter_tweets' },
+            { folder: folder },
             (error, result) => {
                 if (result) resolve(result);
                 else reject(error);

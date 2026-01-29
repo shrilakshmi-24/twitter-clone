@@ -68,6 +68,7 @@ exports.getMe = async (req, res) => {
 exports.updateProfile = async (req, res) => {
     try {
         const { username, bio, dob, gender } = req.body;
+        let avatarUrl;
 
         // Check if username is taken by another user
         if (username) {
@@ -77,14 +78,25 @@ exports.updateProfile = async (req, res) => {
             }
         }
 
+        const updates = { username, bio, dob, gender };
+
+        if (req.file) {
+            const { uploadImage } = require('../utils/cloudinary');
+            const result = await uploadImage(req.file.buffer, 'tuweeter_profiles'); // Separate folder
+            console.log("Avatar upload result:", result);
+            avatarUrl = result.secure_url;
+            updates.avatar = avatarUrl;
+        }
+
         const user = await User.findByIdAndUpdate(
             req.user.id,
-            { $set: { username, bio, dob, gender } },
+            { $set: updates },
             { new: true, runValidators: true }
         ).select('-password');
 
         res.json(user);
     } catch (error) {
+        console.error("Update profile error:", error);
         res.status(400).json({ error: error.message });
     }
 };

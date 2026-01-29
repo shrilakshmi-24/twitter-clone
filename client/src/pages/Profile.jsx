@@ -11,25 +11,51 @@ const Profile = () => {
         dob: '',
         gender: ''
     });
+    const [avatar, setAvatar] = useState(null);
+    const [preview, setPreview] = useState(null);
+    const [initialData, setInitialData] = useState(null);
 
     useEffect(() => {
         if (user) {
-            setFormData({
+            const data = {
                 username: user.username || '',
                 bio: user.bio || '',
                 dob: user.dob ? new Date(user.dob).toISOString().split('T')[0] : '',
                 gender: user.gender || ''
-            });
+            };
+            setFormData(data);
+            setInitialData(data);
+            setPreview(user.avatar || null);
         }
     }, [user]);
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setAvatar(file);
+            setPreview(URL.createObjectURL(file));
+        }
+    };
 
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const loadingToast = toast.loading('Updating profile...');
+
+        const data = new FormData();
+        data.append('username', formData.username);
+        data.append('bio', formData.bio);
+        data.append('dob', formData.dob);
+        data.append('gender', formData.gender);
+        if (avatar) {
+            data.append('avatar', avatar);
+        }
+
         try {
-            const res = await axios.put('http://localhost:5000/api/auth/profile', formData);
+            const res = await axios.put('http://localhost:5000/api/auth/profile', data, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
             // Update context with new user data, keep same token
             const token = localStorage.getItem('token');
             login(res.data, token);
@@ -45,6 +71,23 @@ const Profile = () => {
         <div className="max-w-2xl mx-auto mt-8 bg-gray-800 p-8 rounded-lg shadow-md border border-gray-700">
             <h2 className="text-3xl font-bold mb-6 text-center text-blue-500">Edit Profile</h2>
             <form onSubmit={handleSubmit}>
+                <div className="flex flex-col items-center mb-6">
+                    <img
+                        src={preview || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}
+                        alt="Profile Preview"
+                        className="w-32 h-32 rounded-full border-4 border-blue-500 mb-4 object-cover"
+                    />
+                    <label className="cursor-pointer bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded transition">
+                        Change Profile Picture
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="hidden"
+                        />
+                    </label>
+                </div>
+
                 <div className="mb-4">
                     <label className="block text-gray-300 mb-2">Username</label>
                     <input
@@ -96,7 +139,8 @@ const Profile = () => {
                 </div>
                 <button
                     type="submit"
-                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition"
+                    disabled={!avatar && JSON.stringify(formData) === JSON.stringify(initialData)}
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Save Changes
                 </button>
