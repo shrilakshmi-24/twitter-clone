@@ -13,7 +13,7 @@ const FollowRequests = () => {
 
     const fetchRequests = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/users/requests/pending');
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/requests/pending`);
             setRequests(res.data);
         } catch (error) {
             console.error("Error fetching requests", error);
@@ -24,7 +24,7 @@ const FollowRequests = () => {
 
     const handleAccept = async (id) => {
         try {
-            await axios.put(`http://localhost:5000/api/users/requests/${id}/accept`);
+            await axios.put(`${import.meta.env.VITE_API_URL}/api/users/requests/${id}/accept`);
             setRequests(prev => prev.filter(req => req._id !== id));
             toast.success('Request accepted');
         } catch (error) {
@@ -34,7 +34,7 @@ const FollowRequests = () => {
 
     const handleReject = async (id) => {
         try {
-            await axios.put(`http://localhost:5000/api/users/requests/${id}/reject`);
+            await axios.put(`${import.meta.env.VITE_API_URL}/api/users/requests/${id}/reject`);
             setRequests(prev => prev.filter(req => req._id !== id));
             toast.success('Request rejected');
         } catch (error) {

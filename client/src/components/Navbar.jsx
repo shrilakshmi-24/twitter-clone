@@ -28,7 +28,7 @@ const Navbar = () => {
             }
             setIsSearching(true);
             try {
-                const res = await axios.get(`http://localhost:5000/api/users/search?q=${query}`);
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/search?q=${query}`);
                 setResults(res.data);
             } catch (error) {
                 console.error("Search failed", error);

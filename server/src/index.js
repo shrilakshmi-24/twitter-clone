@@ -46,6 +46,16 @@ app.use('/api/auth', authRoutes);
 app.use('/api/tweets', tweetRoutes);
 app.use('/api/users', userRoutes);
 
+// Serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+    const path = require('path');
+    app.use(express.static(path.join(__dirname, '../../client/dist')));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../../client/dist', 'index.html'));
+    });
+}
+
 // Socket.io connection
 io.on('connection', (socket) => {
     console.log('New client connected', socket.id);

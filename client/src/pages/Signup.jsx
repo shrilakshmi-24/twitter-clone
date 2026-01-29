@@ -18,7 +18,7 @@ const Signup = () => {
         setLoading(true);
         const loadingToast = toast.loading('Creating account...');
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/signup', formData);
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/signup`, formData);
             login(res.data.user, res.data.token);
             toast.dismiss(loadingToast);
             toast.success('Account created!');

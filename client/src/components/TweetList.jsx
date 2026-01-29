@@ -15,7 +15,7 @@ const TweetList = () => {
         // Fetch tweets based on feed type
         const fetchTweets = async () => {
             try {
-                const res = await axios.get(`http://localhost:5000/api/tweets?type=${feedType}`);
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/tweets?type=${feedType}`);
                 setTweets(res.data);
             } catch (error) {
                 console.error("Error fetching tweets", error);
@@ -24,7 +24,7 @@ const TweetList = () => {
         fetchTweets();
 
         // Socket.io connection
-        const socket = io('http://localhost:5000');
+        const socket = io(import.meta.env.VITE_API_URL);
 
         socket.on('new_tweet', (tweet) => {
             setTweets((prev) => [tweet, ...prev]);
@@ -43,7 +43,7 @@ const TweetList = () => {
 
     const handleLike = async (id) => {
         try {
-            await axios.post(`http://localhost:5000/api/tweets/${id}/like`);
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/tweets/${id}/like`);
         } catch (error) {
             console.error("Error liking tweet", error);
         }
@@ -55,7 +55,7 @@ const TweetList = () => {
         if (!text?.trim()) return;
 
         try {
-            const res = await axios.post(`http://localhost:5000/api/tweets/${tweetId}/comment`, { text });
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/tweets/${tweetId}/comment`, { text });
             // Update local state with new comments
             setTweets(prev => prev.map(t =>
                 t._id === tweetId ? { ...t, comments: res.data } : t
@@ -68,7 +68,7 @@ const TweetList = () => {
 
     const handleCommentLike = async (tweetId, commentId) => {
         try {
-            const res = await axios.post(`http://localhost:5000/api/tweets/${tweetId}/comments/${commentId}/like`);
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/tweets/${tweetId}/comments/${commentId}/like`);
             setTweets(prev => prev.map(t =>
                 t._id === tweetId ? { ...t, comments: res.data } : t
             ));

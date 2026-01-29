@@ -17,7 +17,7 @@ const CreateTweet = () => {
         if (image) formData.append('image', image);
 
         try {
-            await axios.post('http://localhost:5000/api/tweets', formData, {
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/tweets`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             setContent('');

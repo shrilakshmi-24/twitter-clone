@@ -18,7 +18,7 @@ const Login = () => {
         setLoading(true);
         const loadingToast = toast.loading('Logging in...');
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/login', formData);
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, formData);
             login(res.data.user, res.data.token);
             toast.dismiss(loadingToast);
             toast.success('Welcome back!');

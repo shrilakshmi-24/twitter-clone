@@ -8,13 +8,10 @@ export const ThemeProvider = ({ children }) => {
 
     useEffect(() => {
         const root = window.document.documentElement;
-        console.log(`[ThemeContext] Current theme: ${theme}`);
         if (theme === 'dark') {
             root.classList.add('dark');
-            console.log("[ThemeContext] Added 'dark' class to root. ClassList:", root.classList.toString());
         } else {
             root.classList.remove('dark');
-            console.log("[ThemeContext] Removed 'dark' class from root. ClassList:", root.classList.toString());
         }
         localStorage.setItem('theme', theme);
     }, [theme]);

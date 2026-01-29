@@ -14,7 +14,7 @@ const UserProfile = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const res = await axios.get(`http://localhost:5000/api/users/${username}`);
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/${username}`);
                 setProfile(res.data);
             } catch (error) {
                 toast.error('User not found');
@@ -30,7 +30,7 @@ const UserProfile = () => {
             const isFollowing = profile.followers.some(follower => follower._id === currentUser?._id);
             const endpoint = isFollowing ? 'unfollow' : 'follow';
 
-            await axios.put(`http://localhost:5000/api/users/${profile._id}/${endpoint}`);
+            await axios.put(`${import.meta.env.VITE_API_URL}/api/users/${profile._id}/${endpoint}`);
 
             // Update local profile state
             setProfile(prev => ({

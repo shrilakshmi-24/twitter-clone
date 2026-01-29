@@ -46,7 +46,7 @@ const Profile = () => {
 
     const handlePrivacyToggle = async () => {
         try {
-            const res = await axios.put('http://localhost:5000/api/users/privacy', { isPrivate: !formData.isPrivate });
+            const res = await axios.put(`${import.meta.env.VITE_API_URL}/api/users/privacy`, { isPrivate: !formData.isPrivate });
             setFormData(prev => ({ ...prev, isPrivate: res.data.isPrivate }));
 
             // Update context
@@ -74,7 +74,7 @@ const Profile = () => {
         }
 
         try {
-            const res = await axios.put('http://localhost:5000/api/auth/profile', data, {
+            const res = await axios.put(`${import.meta.env.VITE_API_URL}/api/auth/profile`, data, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             // Update context with new user data, keep same token

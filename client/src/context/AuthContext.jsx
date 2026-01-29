@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
                 return;
             }
             try {
-                const res = await axios.get('http://localhost:5000/api/auth/me');
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/me`);
                 setUser(res.data);
             } catch (error) {
                 console.error("Auth Error", error);
