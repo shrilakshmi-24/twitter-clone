@@ -40,7 +40,11 @@ exports.getTweets = async (req, res) => {
             .sort({ createdAt: -1 })
             .skip((page - 1) * limit)
             .limit(limit)
-            .populate('author', 'username avatar');
+            .sort({ createdAt: -1 })
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .populate('author', 'username avatar')
+            .populate('comments.user', 'username avatar'); // Populate comment authors
 
         res.json(tweets);
     } catch (error) {
@@ -71,6 +75,63 @@ exports.toggleLike = async (req, res) => {
         io.emit('tweet_liked', { tweetId: tweet._id, likes: tweet.likes });
 
         res.json(tweet);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+exports.addComment = async (req, res) => {
+    try {
+        const { text } = req.body;
+        const tweet = await Tweet.findById(req.params.id);
+
+        if (!tweet) {
+            return res.status(404).json({ error: 'Tweet not found' });
+        }
+
+        const user = await require('../models/User').findById(req.user.id);
+
+        const comment = {
+            text,
+            user: req.user.id,
+            username: user.username,
+            avatar: user.avatar
+        };
+
+        tweet.comments.unshift(comment);
+        await tweet.save();
+
+        // Repopulate for immediate return
+        await tweet.populate('comments.user', 'username avatar');
+
+        res.json(tweet.comments);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+exports.toggleCommentLike = async (req, res) => {
+    try {
+        const { tweetId, commentId } = req.params;
+        const tweet = await Tweet.findById(tweetId);
+
+        if (!tweet) return res.status(404).json({ error: 'Tweet not found' });
+
+        const comment = tweet.comments.id(commentId);
+        if (!comment) return res.status(404).json({ error: 'Comment not found' });
+
+        const userId = req.user.id;
+        const index = comment.likes.indexOf(userId);
+
+        if (index === -1) {
+            comment.likes.push(userId);
+        } else {
+            comment.likes.splice(index, 1);
+        }
+
+        await tweet.save();
+        await tweet.populate('comments.user', 'username avatar');
+        res.json(tweet.comments);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

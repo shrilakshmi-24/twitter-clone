@@ -10,6 +10,7 @@ const rateLimit = require('express-rate-limit');
 
 const authRoutes = require('./routes/auth');
 const tweetRoutes = require('./routes/tweets');
+const userRoutes = require('./routes/users');
 
 const app = express();
 const server = http.createServer(app);
@@ -36,9 +37,14 @@ app.use('/api', limiter);
 // Make io accessible in routes
 app.set('io', io);
 
+app.get('/', (req, res) => {
+    res.send('API is running...');
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tweets', tweetRoutes);
+app.use('/api/users', userRoutes);
 
 // Socket.io connection
 io.on('connection', (socket) => {

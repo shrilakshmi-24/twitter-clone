@@ -35,6 +35,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
   },
+  followers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  following: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

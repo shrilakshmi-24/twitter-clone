@@ -18,6 +18,23 @@ const tweetSchema = new mongoose.Schema({
     likes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    }],
+    comments: [{
+        text: String,
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        avatar: String,
+        username: String,
+        createdAt: {
+            type: Date,
+            default: Date.now
+        },
+        likes: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }]
     }]
 }, { timestamps: true });
 
