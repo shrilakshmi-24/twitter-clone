@@ -5,7 +5,7 @@ const auth = require('../middleware/auth');
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 
-router.get('/', tweetController.getTweets);
+router.get('/', auth, tweetController.getTweets);
 router.post('/', auth, upload.single('image'), tweetController.createTweet);
 router.post('/:id/like', auth, tweetController.toggleLike);
 router.post('/:id/comment', auth, tweetController.addComment);

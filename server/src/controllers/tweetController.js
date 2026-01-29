@@ -1,4 +1,5 @@
 const Tweet = require('../models/Tweet');
+const User = require('../models/User');
 const { uploadImage } = require('../utils/cloudinary');
 
 exports.createTweet = async (req, res) => {
@@ -35,11 +36,19 @@ exports.getTweets = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 20;
+        const type = req.query.type; // 'all' or 'following'
 
-        const tweets = await Tweet.find()
-            .sort({ createdAt: -1 })
-            .skip((page - 1) * limit)
-            .limit(limit)
+        let filter = {};
+
+        if (type === 'following') {
+            const currentUser = await User.findById(req.user.id);
+            // Check if user has following, otherwise return empty or just self
+            const followingIds = currentUser.following || [];
+            // Includes tweets from following AND self
+            filter = { author: { $in: [...followingIds, req.user.id] } };
+        }
+
+        const tweets = await Tweet.find(filter)
             .sort({ createdAt: -1 })
             .skip((page - 1) * limit)
             .limit(limit)

@@ -6,15 +6,16 @@ import { AuthContext } from '../context/AuthContext';
 
 const TweetList = () => {
     const [tweets, setTweets] = useState([]);
+    const [feedType, setFeedType] = useState('all'); // 'all' or 'following'
     const [commentText, setCommentText] = useState({}); // { tweetId: 'text' }
     const [activeCommentBox, setActiveCommentBox] = useState(null); // tweetId
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
-        // Fetch initial tweets
+        // Fetch tweets based on feed type
         const fetchTweets = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/tweets');
+                const res = await axios.get(`http://localhost:5000/api/tweets?type=${feedType}`);
                 setTweets(res.data);
             } catch (error) {
                 console.error("Error fetching tweets", error);
@@ -38,7 +39,7 @@ const TweetList = () => {
         return () => {
             socket.disconnect();
         };
-    }, []);
+    }, [feedType]); // Re-fetch when feed type changes
 
     const handleLike = async (id) => {
         try {
@@ -78,6 +79,22 @@ const TweetList = () => {
 
     return (
         <div className="space-y-4">
+            {/* Feed Toggle */}
+            <div className="flex border-b border-gray-700 mb-4">
+                <button
+                    className={`flex-1 py-3 font-bold hover:bg-gray-800 transition ${feedType === 'all' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-400'}`}
+                    onClick={() => setFeedType('all')}
+                >
+                    For You
+                </button>
+                <button
+                    className={`flex-1 py-3 font-bold hover:bg-gray-800 transition ${feedType === 'following' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-400'}`}
+                    onClick={() => setFeedType('following')}
+                >
+                    Following
+                </button>
+            </div>
+
             {tweets.map((tweet) => (
                 <div key={tweet._id} className="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
                     <div className="flex space-x-3">

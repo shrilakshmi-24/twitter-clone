@@ -59,3 +59,18 @@ exports.unfollowUser = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
+
+exports.searchUsers = async (req, res) => {
+    try {
+        const { q } = req.query;
+        if (!q) return res.json([]);
+
+        const users = await User.find({
+            username: { $regex: q, $options: 'i' }
+        }).select('username avatar bio').limit(10);
+
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};

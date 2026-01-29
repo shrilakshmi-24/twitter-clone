@@ -76,7 +76,14 @@ const UserProfile = () => {
                         </button>
                     </div>
                 </div>
-                {!isOwnProfile && (
+                {isOwnProfile ? (
+                    <Link
+                        to="/profile"
+                        className="px-6 py-2 rounded-full font-bold bg-gray-700 text-white hover:bg-gray-600 border border-gray-500 transition"
+                    >
+                        Edit Profile
+                    </Link>
+                ) : (
                     <button
                         onClick={handleFollow}
                         className={`px-6 py-2 rounded-full font-bold transition ${isFollowing
