@@ -80,15 +80,15 @@ const TweetList = () => {
     return (
         <div className="space-y-4">
             {/* Feed Toggle */}
-            <div className="flex border-b border-gray-700 mb-4">
+            <div className="flex border-b border-gray-200 dark:border-gray-800 mb-4">
                 <button
-                    className={`flex-1 py-3 font-bold hover:bg-gray-800 transition ${feedType === 'all' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-400'}`}
+                    className={`flex-1 py-3 font-bold hover:bg-gray-100 dark:hover:bg-gray-900 transition ${feedType === 'all' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500 dark:text-gray-400'}`}
                     onClick={() => setFeedType('all')}
                 >
                     For You
                 </button>
                 <button
-                    className={`flex-1 py-3 font-bold hover:bg-gray-800 transition ${feedType === 'following' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-400'}`}
+                    className={`flex-1 py-3 font-bold hover:bg-gray-100 dark:hover:bg-gray-900 transition ${feedType === 'following' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500 dark:text-gray-400'}`}
                     onClick={() => setFeedType('following')}
                 >
                     Following
@@ -96,7 +96,7 @@ const TweetList = () => {
             </div>
 
             {tweets.map((tweet) => (
-                <div key={tweet._id} className="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
+                <div key={tweet._id} className="bg-white dark:bg-black p-4 rounded-lg shadow border border-gray-200 dark:border-gray-800">
                     <div className="flex space-x-3">
                         <img
                             src={tweet.author?.avatar || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}
@@ -105,14 +105,14 @@ const TweetList = () => {
                         />
                         <div className="flex-1">
                             <div className="flex items-center space-x-2">
-                                <Link to={`/${tweet.author?.username}`} className="font-bold text-white hover:underline">
+                                <Link to={`/${tweet.author?.username}`} className="font-bold text-black dark:text-white hover:underline">
                                     {tweet.author?.username || 'Unknown'}
                                 </Link>
-                                <span className="text-gray-500 text-sm">{new Date(tweet.createdAt).toLocaleString()}</span>
+                                <span className="text-gray-500 dark:text-gray-400 text-sm">{new Date(tweet.createdAt).toLocaleString()}</span>
                             </div>
-                            <p className="text-gray-200 mt-1 mb-2">{tweet.content}</p>
+                            <p className="text-gray-900 dark:text-gray-200 mt-1 mb-2">{tweet.content}</p>
                             {tweet.image && (
-                                <img src={tweet.image} alt="Tweet media" className="rounded-lg max-h-80 w-full object-cover mb-2 border border-gray-700" />
+                                <img src={tweet.image} alt="Tweet media" className="rounded-lg max-h-80 w-full object-cover mb-2 border border-gray-700 dark:border-gray-800" />
                             )}
                             <div className="mt-3 flex items-center space-x-4 text-gray-400">
                                 <button
@@ -137,11 +137,11 @@ const TweetList = () => {
 
                             {/* Comment Section */}
                             {activeCommentBox === tweet._id && (
-                                <div className="mt-3 bg-gray-900 bg-opacity-50 p-3 rounded-lg">
+                                <div className="mt-3 bg-gray-50 dark:bg-gray-900 bg-opacity-50 p-3 rounded-lg">
                                     <form onSubmit={(e) => handleCommentSubmit(e, tweet._id)} className="flex gap-2 mb-3">
                                         <input
                                             type="text"
-                                            className="flex-1 bg-gray-700 text-white rounded-full px-4 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                                            className="flex-1 bg-white dark:bg-black text-black dark:text-white rounded-full px-4 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm border border-gray-300 dark:border-gray-800"
                                             placeholder="Write a comment..."
                                             value={commentText[tweet._id] || ''}
                                             onChange={(e) => setCommentText({ ...commentText, [tweet._id]: e.target.value })}
@@ -161,11 +161,11 @@ const TweetList = () => {
                                                     <img src={comment.user?.avatar || comment.avatar || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'} alt="user" className="w-8 h-8 rounded-full border border-gray-600" />
                                                 </Link>
                                                 <div className="flex-1">
-                                                    <div className="bg-gray-800 rounded-2xl px-4 py-2 inline-block">
-                                                        <Link to={`/${comment.user?.username || comment.username}`} className="font-bold text-sm text-white hover:underline block">
+                                                    <div className="bg-gray-200 dark:bg-gray-900 rounded-2xl px-4 py-2 inline-block">
+                                                        <Link to={`/${comment.user?.username || comment.username}`} className="font-bold text-sm text-black dark:text-white hover:underline block">
                                                             {comment.user?.username || comment.username}
                                                         </Link>
-                                                        <p className="text-gray-300 text-sm">{comment.text}</p>
+                                                        <p className="text-gray-900 dark:text-gray-300 text-sm">{comment.text}</p>
                                                     </div>
                                                     <div className="flex items-center gap-4 mt-1 ml-2 text-xs text-gray-500">
                                                         <span>{new Date(comment.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>

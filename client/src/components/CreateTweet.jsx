@@ -30,7 +30,7 @@ const CreateTweet = () => {
     };
 
     return (
-        <div className="bg-gray-800 p-4 rounded-lg shadow mb-4 border border-gray-700">
+        <div className="bg-white dark:bg-black p-4 rounded-lg shadow mb-4 border border-gray-200 dark:border-gray-800">
             <div className="flex space-x-3">
                 <img
                     src={user?.avatar}
@@ -39,7 +39,7 @@ const CreateTweet = () => {
                 />
                 <form onSubmit={handleSubmit} className="flex-1">
                     <textarea
-                        className="w-full bg-gray-700 text-white rounded p-2 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                        className="w-full bg-gray-100 dark:bg-gray-900 text-black dark:text-white rounded p-2 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none border border-gray-300 dark:border-gray-800"
                         placeholder="What's happening?"
                         rows="2"
                         value={content}
@@ -57,7 +57,7 @@ const CreateTweet = () => {
                                 onChange={(e) => setImage(e.target.files[0])}
                             />
                         </label>
-                        {image && <span className="text-sm text-gray-400 truncate max-w-[150px]">{image.name}</span>}
+                        {image && <span className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-[150px]">{image.name}</span>}
                         <button
                             type="submit"
                             disabled={!content.trim() && !image}

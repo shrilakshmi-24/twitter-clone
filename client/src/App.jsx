@@ -18,7 +18,7 @@ const PrivateRoute = ({ children }) => {
 
 const App = () => {
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
+    <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-200">
       <Toaster position="top-center" />
       <Navbar />
       <div className="container mx-auto pt-24 px-4">

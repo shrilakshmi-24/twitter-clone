@@ -27,7 +27,7 @@ const UserProfile = () => {
 
     const handleFollow = async () => {
         try {
-            const isFollowing = profile.followers.includes(currentUser._id);
+            const isFollowing = profile.followers.some(follower => follower._id === currentUser?._id);
             const endpoint = isFollowing ? 'unfollow' : 'follow';
 
             await axios.put(`http://localhost:5000/api/users/${profile._id}/${endpoint}`);
@@ -36,8 +36,8 @@ const UserProfile = () => {
             setProfile(prev => ({
                 ...prev,
                 followers: isFollowing
-                    ? prev.followers.filter(id => id !== currentUser._id)
-                    : [...prev.followers, currentUser._id]
+                    ? prev.followers.filter(follower => follower._id !== currentUser._id)
+                    : [...prev.followers, { _id: currentUser._id, username: currentUser.username, avatar: currentUser.avatar }]
             }));
 
             toast.success(isFollowing ? 'Unfollowed' : 'Followed');
@@ -50,10 +50,10 @@ const UserProfile = () => {
     if (!profile) return <div className="text-center mt-20">User not found</div>;
 
     const isOwnProfile = currentUser?._id === profile._id;
-    const isFollowing = profile.followers.includes(currentUser?._id);
+    const isFollowing = profile.followers.some(follower => follower._id === currentUser?._id);
 
     return (
-        <div className="max-w-2xl mx-auto mt-8 bg-gray-800 p-8 rounded-lg shadow-md border border-gray-700">
+        <div className="max-w-2xl mx-auto mt-8 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-6">
                 <img
                     src={profile.avatar || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}
@@ -61,17 +61,17 @@ const UserProfile = () => {
                     className="w-24 h-24 rounded-full border-4 border-gray-700"
                 />
                 <div className="flex-1">
-                    <h2 className="text-3xl font-bold text-white">{profile.username}</h2>
-                    <p className="text-gray-400 mt-1">@{profile.username}</p>
-                    {profile.bio && <p className="text-gray-300 mt-2">{profile.bio}</p>}
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white">{profile.username}</h2>
+                    <p className="text-gray-500 dark:text-gray-400 mt-1">@{profile.username}</p>
+                    {profile.bio && <p className="text-gray-700 dark:text-gray-300 mt-2">{profile.bio}</p>}
 
                     <div className="flex gap-6 mt-4">
                         <button onClick={() => setShowModal('following')} className="text-center hover:text-blue-400 transition">
-                            <span className="font-bold text-white block">{profile.following?.length || 0}</span>
+                            <span className="font-bold text-gray-900 dark:text-white block">{profile.following?.length || 0}</span>
                             <span className="text-gray-500 text-sm">Following</span>
                         </button>
                         <button onClick={() => setShowModal('followers')} className="text-center hover:text-blue-400 transition">
-                            <span className="font-bold text-white block">{profile.followers?.length || 0}</span>
+                            <span className="font-bold text-gray-900 dark:text-white block">{profile.followers?.length || 0}</span>
                             <span className="text-gray-500 text-sm">Followers</span>
                         </button>
                     </div>
@@ -79,7 +79,7 @@ const UserProfile = () => {
                 {isOwnProfile ? (
                     <Link
                         to="/profile"
-                        className="px-6 py-2 rounded-full font-bold bg-gray-700 text-white hover:bg-gray-600 border border-gray-500 transition"
+                        className="px-6 py-2 rounded-full font-bold bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-500 transition"
                     >
                         Edit Profile
                     </Link>
@@ -87,8 +87,8 @@ const UserProfile = () => {
                     <button
                         onClick={handleFollow}
                         className={`px-6 py-2 rounded-full font-bold transition ${isFollowing
-                            ? 'bg-gray-700 text-white hover:bg-gray-600 border border-gray-500'
-                            : 'bg-white text-black hover:bg-gray-200'
+                            ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-500'
+                            : 'bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200'
                             }`}
                     >
                         {isFollowing ? 'Following' : 'Follow'}
@@ -96,16 +96,16 @@ const UserProfile = () => {
                 )}
             </div>
 
-            <div className="mt-8 pt-8 border-t border-gray-700">
+            <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
                 <div className="text-gray-500 text-sm">Joined {new Date(profile.createdAt).toLocaleDateString()}</div>
             </div>
 
             {/* Modal */}
             {showModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-                    <div className="bg-gray-800 p-6 rounded-lg w-full max-w-md border border-gray-700 max-h-[80vh] flex flex-col">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg w-full max-w-md border border-gray-200 dark:border-gray-700 max-h-[80vh] flex flex-col">
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-xl font-bold text-white capitalize">{showModal}</h3>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white capitalize">{showModal}</h3>
                             <button onClick={() => setShowModal(null)} className="text-gray-400 hover:text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -121,11 +121,11 @@ const UserProfile = () => {
                                         key={user._id}
                                         to={`/${user.username}`}
                                         onClick={() => setShowModal(null)}
-                                        className="flex items-center gap-3 hover:bg-gray-700 p-2 rounded transition"
+                                        className="flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded transition"
                                     >
                                         <img src={user.avatar} alt={user.username} className="w-10 h-10 rounded-full" />
                                         <div>
-                                            <span className="font-bold text-white block">{user.username}</span>
+                                            <span className="font-bold text-gray-900 dark:text-white block">{user.username}</span>
                                         </div>
                                     </Link>
                                 ))

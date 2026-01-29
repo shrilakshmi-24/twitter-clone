@@ -68,7 +68,8 @@ const Profile = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto mt-8 bg-gray-800 p-8 rounded-lg shadow-md border border-gray-700">
+
+        <div className="max-w-2xl mx-auto mt-8 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
             <h2 className="text-3xl font-bold mb-6 text-center text-blue-500">Edit Profile</h2>
             <form onSubmit={handleSubmit}>
                 <div className="flex flex-col items-center mb-6">
@@ -77,7 +78,7 @@ const Profile = () => {
                         alt="Profile Preview"
                         className="w-32 h-32 rounded-full border-4 border-blue-500 mb-4 object-cover"
                     />
-                    <label className="cursor-pointer bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded transition">
+                    <label className="cursor-pointer bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-900 dark:text-white py-2 px-4 rounded transition border border-gray-300 dark:border-transparent">
                         Change Profile Picture
                         <input
                             type="file"
@@ -89,45 +90,45 @@ const Profile = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-300 mb-2">Username</label>
+                    <label className="block text-gray-700 dark:text-gray-300 mb-2">Username</label>
                     <input
                         type="text"
                         name="username"
                         value={formData.username}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 bg-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300 dark:border-transparent"
                         required
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-gray-300 mb-2">Bio</label>
+                    <label className="block text-gray-700 dark:text-gray-300 mb-2">Bio</label>
                     <textarea
                         name="bio"
                         value={formData.bio}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 bg-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300 dark:border-transparent"
                         rows="3"
                         maxLength="160"
                     ></textarea>
                 </div>
                 <div className="flex gap-4 mb-6">
                     <div className="w-1/2">
-                        <label className="block text-gray-300 mb-2">Date of Birth</label>
+                        <label className="block text-gray-700 dark:text-gray-300 mb-2">Date of Birth</label>
                         <input
                             type="date"
                             name="dob"
                             value={formData.dob}
                             onChange={handleChange}
-                            className="w-full px-4 py-2 bg-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300 dark:border-transparent"
                         />
                     </div>
                     <div className="w-1/2">
-                        <label className="block text-gray-300 mb-2">Gender</label>
+                        <label className="block text-gray-700 dark:text-gray-300 mb-2">Gender</label>
                         <select
                             name="gender"
                             value={formData.gender}
                             onChange={handleChange}
-                            className="w-full px-4 py-2 bg-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300 dark:border-transparent"
                         >
                             <option value="">Select Gender</option>
                             <option value="Male">Male</option>

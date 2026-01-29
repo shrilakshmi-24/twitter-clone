@@ -31,39 +31,39 @@ const Signup = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-20 bg-gray-800 p-8 rounded-lg shadow-md border border-gray-700">
+        <div className="max-w-md mx-auto mt-20 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
             <h2 className="text-3xl font-bold mb-6 text-center text-blue-500">Join Tuweeter</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label className="block text-gray-300 mb-2">Username</label>
+                    <label className="block text-gray-700 dark:text-gray-300 mb-2">Username</label>
                     <input
                         type="text"
                         name="username"
                         value={formData.username}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 bg-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300 dark:border-transparent"
                         required
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-gray-300 mb-2">Email</label>
+                    <label className="block text-gray-700 dark:text-gray-300 mb-2">Email</label>
                     <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 bg-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300 dark:border-transparent"
                         required
                     />
                 </div>
                 <div className="mb-6">
-                    <label className="block text-gray-300 mb-2">Password</label>
+                    <label className="block text-gray-700 dark:text-gray-300 mb-2">Password</label>
                     <input
                         type="password"
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 bg-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300 dark:border-transparent"
                         required
                     />
                 </div>
