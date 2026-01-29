@@ -9,6 +9,7 @@ const Login = lazy(() => import('./pages/Login'));
 const Signup = lazy(() => import('./pages/Signup'));
 const Profile = lazy(() => import('./pages/Profile'));
 const UserProfile = lazy(() => import('./pages/UserProfile'));
+const FollowRequests = lazy(() => import('./pages/FollowRequests'));
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+            <Route path="/requests" element={<PrivateRoute><FollowRequests /></PrivateRoute>} />
 
             <Route path="/:username" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
           </Routes>

@@ -27,16 +27,99 @@ exports.followUser = async (req, res) => {
             return res.status(400).json({ error: 'You cannot follow yourself' });
         }
 
-        if (!userToFollow.followers.includes(req.user.id)) {
+        // Check if already following
+        if (userToFollow.followers.includes(req.user.id)) {
+            return res.status(400).json({ error: 'You are already following this user' });
+        }
+
+        // Check if request already sent
+        if (userToFollow.followRequests.includes(req.user.id)) {
+            return res.status(400).json({ error: 'Follow request already sent' });
+        }
+
+        if (userToFollow.isPrivate) {
+            userToFollow.followRequests.push(req.user.id);
+            await userToFollow.save();
+            return res.json({ message: 'Follow request sent', status: 'requested' });
+        } else {
             userToFollow.followers.push(req.user.id);
             currentUser.following.push(req.params.id);
             await userToFollow.save();
             await currentUser.save();
+            return res.json(currentUser.following);
         }
-
-        res.json(currentUser.following);
     } catch (error) {
         res.status(400).json({ error: error.message });
+    }
+};
+
+exports.acceptFollowRequest = async (req, res) => {
+    try {
+        const userIdToAccept = req.params.id;
+        const currentUser = await User.findById(req.user.id);
+        const userToAccept = await User.findById(userIdToAccept);
+
+        if (!currentUser.followRequests.includes(userIdToAccept)) {
+            return res.status(400).json({ error: 'No follow request found' });
+        }
+
+        // Remove from requests
+        currentUser.followRequests = currentUser.followRequests.filter(id => id.toString() !== userIdToAccept);
+
+        // Add to followers
+        currentUser.followers.push(userIdToAccept);
+        await currentUser.save();
+
+        // Add to user's following
+        if (userToAccept) {
+            userToAccept.following.push(currentUser._id);
+            await userToAccept.save();
+        }
+
+        res.json(currentUser.followRequests);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+exports.rejectFollowRequest = async (req, res) => {
+    try {
+        const userIdToReject = req.params.id;
+        const currentUser = await User.findById(req.user.id);
+
+        if (!currentUser.followRequests.includes(userIdToReject)) {
+            return res.status(400).json({ error: 'No follow request found' });
+        }
+
+        currentUser.followRequests = currentUser.followRequests.filter(id => id.toString() !== userIdToReject);
+        await currentUser.save();
+
+        res.json(currentUser.followRequests);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+exports.updatePrivacy = async (req, res) => {
+    try {
+        const { isPrivate } = req.body;
+        const user = await User.findByIdAndUpdate(
+            req.user.id,
+            { isPrivate },
+            { new: true }
+        ).select('-password');
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.getPendingRequests = async (req, res) => {
+    try {
+        const currentUser = await User.findById(req.user.id).populate('followRequests', 'username avatar');
+        res.json(currentUser.followRequests);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 };
 

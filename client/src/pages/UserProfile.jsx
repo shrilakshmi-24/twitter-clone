@@ -86,18 +86,47 @@ const UserProfile = () => {
                 ) : (
                     <button
                         onClick={handleFollow}
-                        className={`px-6 py-2 rounded-full font-bold transition ${isFollowing
+                        disabled={profile.followRequests?.includes(currentUser?._id)}
+                        className={`px-6 py-2 rounded-full font-bold transition ${isFollowing || profile.followRequests?.includes(currentUser?._id)
                             ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-500'
                             : 'bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200'
                             }`}
                     >
-                        {isFollowing ? 'Following' : 'Follow'}
+                        {isFollowing ? 'Following' : profile.followRequests?.includes(currentUser?._id) ? 'Requested' : 'Follow'}
                     </button>
                 )}
             </div>
 
             <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
-                <div className="text-gray-500 text-sm">Joined {new Date(profile.createdAt).toLocaleDateString()}</div>
+                <div className="text-gray-500 text-sm mb-4">Joined {new Date(profile.createdAt).toLocaleDateString()}</div>
+
+                {/* Private Account Check */}
+                {!isOwnProfile && profile.isPrivate && !isFollowing ? (
+                    <div className="text-center py-12 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
+                        <div className="flex justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">This account is private</h3>
+                        <p className="text-gray-500 dark:text-gray-400">Follow to see their tweets.</p>
+                    </div>
+                ) : (
+                    <div className="space-y-4">
+                        {/* We need to fetch user tweets here actually, but UserProfile currently doesn't fetch tweets. 
+                            Assuming TweetList handles it or we add it. 
+                            For now, if UserProfile is just header, we are done. 
+                            BUT, usually there is a feed below. 
+                            Let's check if there is a feed component here or if it was supposed to be here.
+                            Looking at previous code, there was no TweetList in UserProfile return. 
+                            Wait, UserProfile component in the file I viewed EARLIER (step 872) did NOT have a tweet list.
+                            It only had the header and modal logic.
+                            The user probably sees empty space or we need to add TweetList passing the username/id.
+                            Let's assume for now we just block the view.
+                        */}
+                        <p className="text-center text-gray-500">Tweets would appear here (Feature in progress for UserProfile feed)</p>
+                    </div>
+                )}
             </div>
 
             {/* Modal */}

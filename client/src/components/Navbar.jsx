@@ -134,6 +134,19 @@ const Navbar = () => {
                                         Profile
                                     </Link>
 
+                                    <Link
+                                        to="/requests"
+                                        className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900 flex justify-between items-center"
+                                        onClick={() => setIsDropdownOpen(false)}
+                                    >
+                                        Follow Requests
+                                        {user.followRequests?.length > 0 && (
+                                            <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                                                {user.followRequests.length}
+                                            </span>
+                                        )}
+                                    </Link>
+
                                     <button
                                         onClick={toggleTheme}
                                         className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900 flex justify-between items-center"
