@@ -24,7 +24,7 @@ exports.createTweet = async (req, res) => {
 
         // Socket.io emit
         const io = req.app.get('io');
-        io.emit('new_tweet', tweet);
+        if (io) io.emit('new_tweet', tweet);
 
         res.status(201).json(tweet);
     } catch (error) {
@@ -81,7 +81,7 @@ exports.toggleLike = async (req, res) => {
 
         // Emit event
         const io = req.app.get('io');
-        io.emit('tweet_liked', { tweetId: tweet._id, likes: tweet.likes });
+        if (io) io.emit('tweet_liked', { tweetId: tweet._id, likes: tweet.likes });
 
         res.json(tweet);
     } catch (error) {
